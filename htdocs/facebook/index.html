@@ -4,65 +4,30 @@
 		<meta charset="utf-8" />
 		<title>songticker.li Facebook App</title>
 		<style>
-			body {
-				background: url(bg_body.jpg) no-repeat top scroll;
-				padding: 0;
-				margin: 0;
-				margin-left: 30px;
-
-				font-family: 'bitstream vera sans','lucida grande',verdana,sans-serif;
-			}
-			#head {
-				background: url(bg_header.jpg) no-repeat top left scroll;
-				padding:0;
-				margin:0;
-				height: 500;
-				position: relative;
-			}
-			#main {
-				border: 4px solid #1C2734;
-				-moz-border-radius: 6px;
-				-webkit-border-radius: 6px;
-				border-radius: 6px;
-				padding: 2em;
-				margin: 1em;
-				background-color: white;
-				position: absolute;
-				top: 200px;
-				overflow: none;
-			}
-			#songticker_wrapper {
-				position: absolute;
-				left: 20em;
-				top: 5em;
-				float: right;
-			}
-			li {
-				display: inline;
-			}
+.border-box {
+	text-align: center;
+	z-index: 1020;
+	font-family: sans-serif;
+	font-size: 80%;
+	color: blue;
+	-moz-border-radius:6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border:1px solid #ddd;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	width: 300px;
+	height: 70px;
+	background-color: white;
+	padding-top: 9px;
+}
 		</style>
 	</head>
 	<body>
-		<div id="head"></div>
-		<div id="songticker_wrapper">
-			<div id="songtickerli"></div>
-			<script src="/rabe.js"></script>
+		<div align="center">
+		<div class="border-box">
+			<p>Was machst du hier?<br>Nur auf <a href="http://songticker.li" target="_blank">songticker.li</a> hats was.</p>
 		</div>
-		<div id="main">
-			<p>
-				Das Berner Kulturradio mit tonnenweise Musik, Informations- und Kultursendungen in Stilen und zu Themen, die in anderen Medien zu kurz kommen. Alles ohne Werbeunterbrüche!
-			</p>
-			<ul>
-				<li><a href="http://www.rabe.ch" target="_parent">Homepage</a></li>
-				<li><a href="http://www.rabe.ch/verein/mitglied.html" target="_parent">Mitglied werden</a></li>
-				<li><a href="#" onclick="facebook_add_friend(); return false;">Freund werden</a></li>
-				<li><a href="#" onclick="facebook_profileticker(); return false;">Songticker auf Profil</a></li>
-			</ul>
-			<p>Weitere Communities</p>
-			<ul>
-				<li>myspace</li>
-				<li><a href="http://last.fm/group/rabe" target="_parent">last.fm</a></li>
-			</ul>
 		</div>
 	</body>
 </html>

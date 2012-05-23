@@ -1,0 +1,53 @@
+songticker.li
+-------------
+2010,2012 - Lucas S. Bickel - hairmare.ch
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published 
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+songtickerli is based on the following projects that are
+available under the MIT License.
+
+- jQuery JavaScript Library v1.4.3pre 
+  http://jquery.com/
+  Copyright 2010, John Resig
+  Copyright 2010, The Dojo Foundation
+- jQuery JSON Plugin 2.1 (2009-08-14)
+  Copyright 2009, Brantley Harris
+  Copyright 2005, Bob Ippolito.
+- jStore - Persistent Client-Side Storage 
+  http://eric.garside.name
+  Copyright 2009, Eric Garside
+  Copyright 2006, Klaus Hartl 
+  Copyright 2008, Daniel Bulli
+- SimpleModal 1.3.5 - jQuery Plugin
+  http://www.ericmmartin.com/
+  Copyright 2010, Eric Martin
+
+The images used in Songtickerli are licensed as follows.
+
+- Crystal Iconset 
+  http://www.everaldo.com/
+  Copyright 2007, The Yellow Icon
+  Lesser General Public License LGPL
+- Wikipedia Logo
+  Copyright, The Wikipedia Foundation
+  Creative Commons Attribution-ShareAlike License
+- Find Me On Icons 
+  http://jeremy.am/
+  Copyright 2009, Jermeny Anticounti
+  Creative Commons Attribution-Share Alike 3.0 US License
+- Radio RaBe 95.6 Mhz Logo
+  http://www.rabe.ch
+  Copyright 2009, Radio RaBe, Remo Abplanalp
+

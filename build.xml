@@ -6,29 +6,42 @@
 	<taskdef name="sync" classname="phing.tasks.ext.FileSyncTask" />
 
 	<target name="test">
-		<!-- not implemented ;) -->
+		<!-- not implemented :( too late now -->
 	</target>
 
-	<target name="build" depends="pack-js,flxhr">
-		<copy todir="work" overwrite="true">
-			<fileset dir="htdocs/">
-				<include name="*.html"/>
-				<include name="*.gif"/>
-				<include name="*.png"/>
+	<target name="stage" depends="build">
+		<copy todir="_site" overwrite="true">
+			<fileset dir="work/">
+				<include name="index.html"/>
+				<include name="demo.html"/>
+				<include name="ticker.php"/>
+				<include name="rabe.js"/>
+				<include name="jquery.min.js"/>
+				<include name="jquery.json.min.js"/>
+				<include name="jquery.jstore-all-min.js"/>
+				<include name="jquery.simplemodal.1.4.2.min.js"/>
+				<include name="copyright.html"/>
+				<include name="add_artist.html"/>
 				<include name="*.ico"/>
 				<include name="*.xml"/>
 				<include name="songtickerli.js"/>
-				<include name="facebook/"/>
+				<include name="fb_xd_receiver.html"/>
+				<include name="facebook/*"/>
 				<include name="opensocial/"/>
+				<!-- jstore support for oldish platforms -->
+				<include name="jStore.Flash.html"/>
+				<include name="jStore.swf"/>
 			</fileset>
+            <fileset dir=".">
+                <include name="LICENSE"/>
+            </fileset>
 		</copy>
 	</target>
 
-	<target name="pack-js">
-		<!-- prep css for inclusion in rabe.js -->
+	<target name="build" depends="jquery,jquery-json,jquery-jstore,jquery-simplemodal,fbconnect,fbapp,artistdb,images">
 		<copy todir="work/" overwrite="true">
 			<fileset dir="htdocs/">
-				<include name="style_*.css"/>
+				<include name="*.css"/>
 			</fileset>
 			<filterchain>
 				<striplinebreaks/>
@@ -36,29 +49,90 @@
 		</copy>
 		<copy todir="work/" overwrite="true">
 			<fileset dir="htdocs/">
+				<include name="*.png"/>
+                <include name="ticker.php"/>
+			</fileset>
+		</copy>
+		<copy todir="work/" overwrite="true">
+			<fileset dir="htdocs">
 				<include name="*.js"/>
 				<exclude name="songtickerli.js"/>
 			</fileset>
 			<filterchain>
 				<filterreader classname="phing.filters.ReplaceTokensWithFile">
 					<param name="dir"           value="work/"/>
-					<param name="begintoken"    value="ccs_token[[["/>
+					<param name="begintoken"    value="png_token[[["/>
 					<param name="endtoken"      value="]]]"/>
-					<param name="prefix"        value="style_"/>
-					<param name="postfix"       value=".css" />
+					<param name="prefix"        value=""/>
+					<param name="postfix"       value=".png.txt" />
 					<param name="translatehtml" value="false"/>
 				</filterreader>
 				<!--
 				<filterreader classname="phing.filters.JSPackerFilter">
 					<param name="encoding" value="Numeric"/>
-					<param name="fastDecode" value="true"/>
+					<param name="fastDecode" value="false"/>
 					<param name="specialCharacters" value="false"/>
 				</filterreader>
 				-->
 			</filterchain>
 		</copy>
+		<copy todir="work/" overwrite="true">
+			<fileset dir="work">
+				<include name="artistdb.js"/>
+			</fileset>
+		</copy>
+		<copy todir="work/" overwrite="true">
+			<fileset dir=".">
+				<include name="README"/>
+			</fileset>
+		</copy>
+		<exec command="sed --in-place -f scripts/strip_html.sed work/index.html"/>
+		<exec command="echo '&lt;!--' &gt; work/README.html.txt"/>
+		<exec command="cat work/README &gt;&gt; work/README.html.txt"/>
+		<exec command="echo '--&gt;' &gt;&gt; work/README.html.txt"/>
+		<exec command="cat work/README &gt; work/README.txt"/>
+		<copy todir="work/" overwrite="true">
+			<fileset dir="htdocs/">
+				<include name="*.html"/>
+			</fileset>
+			<filterchain>
+				<filterreader classname="phing.filters.ReplaceTokensWithFile">
+					<param name="dir"           value="work/"/>
+					<param name="begintoken"    value="css_token{"/>
+					<param name="endtoken"      value="}"/>
+					<param name="prefix"        value=""/>
+					<param name="postfix"       value=".css" />
+					<param name="translatehtml" value="false"/>
+				</filterreader>
+				<filterreader classname="phing.filters.ReplaceTokensWithFile">
+					<param name="dir"           value="work/"/>
+					<param name="begintoken"    value="script_token[[["/>
+					<param name="endtoken"      value="]]]"/>
+					<param name="prefix"        value=""/>
+					<param name="postfix"       value=".js" />
+					<param name="translatehtml" value="false"/>
+				</filterreader>
+				<filterreader classname="phing.filters.ReplaceTokensWithFile">
+					<param name="dir"           value="work/"/>
+					<param name="begintoken"    value="png_token[[["/>
+					<param name="endtoken"      value="]]]"/>
+					<param name="prefix"        value=""/>
+					<param name="postfix"       value=".png.txt" />
+					<param name="translatehtml" value="false"/>
+				</filterreader>
+				<filterreader classname="phing.filters.ReplaceTokensWithFile">
+					<param name="dir"           value="work/"/>
+					<param name="begintoken"    value="text_token[[["/>
+					<param name="endtoken"      value="]]]"/>
+					<param name="prefix"        value=""/>
+					<param name="postfix"       value=".txt" />
+					<param name="translatehtml" value="false"/>
+				</filterreader>
+			</filterchain>
+		</copy>
 	</target>
 
+	<!--
 	<target name="flxhr">
 		<untar file="packages/flXHR-1.0.5.tar.gz" todir="temp/"/>
 		<copy todir="work/flensed" overwrite="true">
@@ -67,7 +141,6 @@
 			</fileset>
 		</copy>
 	</target>
-
 	<target name="jxhr">
 		<unzip file="packages/jXHR-0.1.zip" todir="temp/"/>
 		<copy todir="work/jxhr" overwrite="true">
@@ -76,21 +149,218 @@
 			</fileset>
 		</copy>
 	</target>
+	-->
+	<target name="jquery">
+		<copy todir="work" overwrite="true">
+			<fileset dir="../jquery/dist/">
+				<include name="*.js"/>
+			</fileset>
+			<!--
+			<filterchain>
+				<filterreader classname="phing.filters.JSPackerFilter">
+					<param name="encoding" value="Normal"/>
+					<param name="fastDecode" value="true"/>
+					<param name="specialCharacters" value="false"/>
+				</filterreader>
+			</filterchain>
+			-->
+		</copy>
+	</target>
+	<target name="jquery-json">
+		<copy todir="work" overwrite="true">
+			<fileset dir="../jquery-json/src">
+				<include name="*.js"/>
+			</fileset>
+			<!--
+			<filterchain>
+				<filterreader classname="phing.filters.JSPackerFilter">
+					<param name="encoding" value="Normal"/>
+					<param name="fastDecode" value="true"/>
+					<param name="specialCharacters" value="false"/>
+				</filterreader>
+			</filterchain>
+			-->
+		</copy>
+	</target>
+	<target name="jquery-jstore">
+		<exec command="wget http://jquery-jstore.googlecode.com/files/jStore-1.2.0-production.tar.gz -O work/jStore-1.2.0-production.tar.gz"/>
+		<exec command="tar zxvf work/jStore-1.2.0-production.tar.gz -C work"/>
+		<!--
+		<copy tofile="work/jquery.jstore.js" file="../jquery-jstore/src/class.js" overwrite="true"/>
+			<filterchain>
+				<filterreader classname="phing.filters.JSPackerFilter">
+					<param name="encoding" value="Normal"/>
+					<param name="fastDecode" value="true"/>
+					<param name="specialCharacters" value="false"/>
+				</filterreader>
+			</filterchain>
+		<append destFile="work/jquery.jstore.js">
+			<fileset dir="../jquery-jstore/src/">
+				<include name="jquery.jstore.js"/>
+			</fileset>
+		</append>
+		-->
+	</target>
+	<target name="jquery-simplemodal">
+		<copy todir="work" overwrite="true">
+			<fileset dir="../jquery-simplemodal/simplemodal/dist/">
+				<include name="*.js"/>
+			</fileset>
+		</copy>
+	</target>
 
-	<target name="publish" depends="build">
+	<target name="fbconnect">
+	</target>
+
+	<target name="fbapp">
+		<copy todir="work/facebook" overwrite="true">
+			<fileset dir="htdocs/facebook">
+				<include name="index.html"/>
+			</fileset>
+			<filterchain>
+				<filterreader classname="phing.filters.ReplaceTokensWithFile">
+					<param name="dir"           value="work/"/>
+					<param name="begintoken"    value="png_token[[["/>
+					<param name="endtoken"      value="]]]"/>
+					<param name="prefix"        value=""/>
+					<param name="postfix"       value=".png.txt" />
+					<param name="translatehtml" value="false"/>
+				</filterreader>
+			</filterchain>
+		</copy>
+	</target>
+
+	<target name="artistdb">
+		<exec command="wget '${artistdb.couchview}' -O work/artistdb-raw.js"/>
+
+		<exec command="php scripts/couch2plain.php > work/artistdb-plain.js"/>
+
+		<move file="work/artistdb-plain.js" tofile="work/artistdb.js">
+			<filterchain>
+				<filterreader classname="phing.filters.JSPackerFilter">
+					<param name="encoding" value="Normal"/>
+					<param name="fastDecode" value="true"/>
+					<param name="specialCharacters" value="false"/>
+				</filterreader>
+			</filterchain>
+		</move>
+		<exec command="tail -n +2 work/artistdb.csv | wc -l > work/artistdb.count.txt "/>
+	</target>
+
+	<target name="images">
+		<property name="source" value=""/>
+		<property name="resize" value=""/>
+		<phingcall target="convert_image">
+			<property name="file"   value="logo_rabe_mono"/>
+			<property name="resize" value="111x150"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file"   value="logo_rabe_blau"/>
+			<property name="resize" value="111x150"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file"   value="logo_rabe_gruen_weiss"/>
+			<property name="resize" value="111x150"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file"   value="logo_rabe_orange_weiss"/>
+			<property name="resize" value="111x150"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file"   value="logo_rabe_rot_weiss"/>
+			<property name="resize" value="111x150"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="website_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="wikipedia_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="source" value="lastfm_64_0.png"/>
+			<property name="file" value="lastfm_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="source" value="myspace_64_0.png"/>
+			<property name="file" value="myspace_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="source" value="facebook_64_0.png"/>
+			<property name="file" value="facebook_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="source" value="twitter_64_0.png"/>
+			<property name="file" value="twitter_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="source" value="discogs_64_0.png"/>
+			<property name="file" value="discogs_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="source" value="youtube_64_0.png"/>
+			<property name="file" value="youtube_logo_64"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="facebook_connect"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="herz"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="info"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="gear"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="hist"/>
+		</phingcall>
+		<phingcall target="convert_image">
+			<property name="file" value="initial_info_overlay_songtickerli"/>
+		</phingcall>
+</target>
+
+	<target name="convert_image">
+		<if>
+			<equals arg1="${source}" arg2=""/>
+			<then/>
+			<else>
+				<exec command="unzip -u packages/find_me_on_icons_style_0.zip 'style 0/${source}'"/>
+				<exec command="mv 'style 0/${source}' work/${file}.png" />
+			</else>
+		</if>
+		<if>
+			<equals arg1="${resize}" arg2=""/>
+			<then/>
+			<else>
+				<exec command="convert -transparent white -resize ${resize} packages/rabe/${file}.jpg work/${file}.png"/>
+			</else>
+		</if>
+		<exec command="base64 -w 0 work/${file}.png > work/${file}.png.txt"/>
+	</target>
+
+    <target name="build-lib-tarball" depends="stage">
+        <exec command="sh build.libjs.sh > _site/rabe.lib.js &amp;&amp; mv _site/rabe.lib.js _site/rabe.js"/>
+        <tar destfile="rabe-songticker-${build.version}.tar.gz" compression="gzip" basedir="_site" prefix="rabe-songticker-${build.version}">
+            <fileset dir="_site/">
+                <include name="LICENSE"/>
+                <include name="rabe.js"/>
+                <include name="jquery.min.js"/>
+                <include name="jquery.json.min.js"/>
+                <include name="demo.html"/>
+                <include name="ticker.php"/>
+            </fileset>
+        </tar>
+    </target>
+
+	<target name="publish" depends="stage">
 		<!-- takes the current checkout and uses the FileSyncTask from my portage overlay 
 		     to publish it to a location defined in build.properties -->
-		<sync sourcedir="work/"
+		<sync sourcedir="_site/"
 		      destinationdir="${publish.destination}htdocs/"
 		      excludefile="build.publish.exclude"
 		      listonly="false"
-		      verbose="true"/>
-		<chmod mode="744">
-			<fileset dir="${publish.destination}htdocs/">
-				<include name="*.*"/>
-				<include name="flensed/*.*"/>
-				<include name="flxhr/*.*"/>
-			</fileset>
-		</chmod>
+		      verbose="true"
+		      delete="true"/>
 	</target>
 </project>

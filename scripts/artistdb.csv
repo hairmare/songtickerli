@@ -1,0 +1,33 @@
+{
+	printf "SONGTICKERLI.artist_info['"tolower($2)"'] = {"
+	if ($3 != "") {
+		printf "web: '"$3"', "
+	}
+	if ($4 != "") {
+		printf "twitter: 'http://twitter.com/"$4"', "
+	}
+	if ($5 != "") {
+		printf "myspace: 'http://www.myspace.com/"$5"', "
+	}
+	if ($6 != "") {
+		printf "facebook: 'http://www.facebook.com/"$6"', "
+	}
+	if ($7 != "") {
+		printf "wikipedia: 'http://de.wikipedia.org/wiki/"$7"', "
+	} else if ($8 != "") {
+		printf "wikipedia: 'http://en.wikipedia.org/wiki/"$8"', "
+	}
+	if ($9 != "") {
+		printf "discogs: 'http://discogs.com/artist/"$9"', "
+	}
+	if ($10 != "") {
+		printf "lastfm: 'http://last.fm/artist/"$10"', "
+	}
+	if ($12 != "") {
+		printf "youtube: 'http://www.youtube.com/user/"$12"' "
+	}
+	printf "};\n"
+}
+
+
+
